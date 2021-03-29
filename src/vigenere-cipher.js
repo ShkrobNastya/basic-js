@@ -1,13 +1,65 @@
 const CustomError = require("../extensions/custom-error");
 
 class VigenereCipheringMachine {
-  encrypt() {
-    throw new CustomError('Not implemented');
-    // remove line with error and write your code here
+  constructor (direct = true) {
+    this.direct = direct;
+  }
+
+  encrypt(str, key) {
+
+    if (!str || !key) {
+      throw Error;
+    }
+
+    const strArr = str.toUpperCase().split('');
+    let keyArr = key.toUpperCase();
+
+    while (strArr.length > keyArr.length) {
+      keyArr += keyArr;
+    }
+
+    keyArr = keyArr.split('');
+    let temp = 0;
+    const res = [];
+
+    for (let l of strArr) {
+      if (/[a-z]/i.test(l)) {
+        res.push(String.fromCharCode((((l.charCodeAt(0) - 65) + (keyArr[temp++].charCodeAt(0) - 65)) % 26) + 65));
+      } else {
+        res.push(l);
+      }
+    }
+    
+    return this.direct ? res.join('') : res.reverse().join('');
   }    
-  decrypt() {
-    throw new CustomError('Not implemented');
-    // remove line with error and write your code here
+
+  decrypt(str, key) {
+
+    if (!str || !key) {
+      throw Error;
+    }
+
+    const strArr = str.toUpperCase().split('');
+    let keyArr = key.toUpperCase();
+
+    while (strArr.length > keyArr.length) {
+      keyArr += keyArr;
+    }
+
+    keyArr = keyArr.split('');
+    let temp = 0;
+    const res = [];
+
+    for (let l of strArr) {
+      if (/[a-z]/i.test(l)) {
+        res.push(String.fromCharCode((((l.charCodeAt(0) - 65) + (26 - (keyArr[temp++].charCodeAt(0) - 65))) % 26) + 65));
+      } else {
+        res.push(l);
+      }
+    }
+    
+    return this.direct ? res.join('') : res.reverse().join('');
+
   }
 }
 
